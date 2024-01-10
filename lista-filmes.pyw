@@ -6,8 +6,16 @@ import json
 from datetime import datetime
 import os
 
-# Adicione essa variável no início do seu código
-PROXIMO_ID = 1
+# Lê o arquivo JSON
+with open('registros_filmes.json', 'r') as file:
+    dados = json.load(file)
+
+# Encontra o ID máximo
+ids = [filme['ID'] for filme in dados]
+proxima_id = max(ids) + 1
+
+# Atribui o valor encontrado à variável PROXIMO_ID
+PROXIMO_ID = proxima_id
 
 # Lista de serviços de streaming ordenados alfabeticamente
 onde_opcoes = ["Apple TV", "Baixar", "Cinema", "Disney+", "GloboPlay", "HBO+", "Netflix", "Prime Video", "Star+"]
@@ -27,8 +35,6 @@ class AdicionarFilmePopup:
         self.var_vontade = tk.IntVar()
         self.var_nota = tk.IntVar()
         self.var_visto = tk.BooleanVar()
-
-
 
         # Adicione a variável de controle para o ID
         self.var_id = tk.IntVar()
@@ -73,6 +79,7 @@ class AdicionarFilmePopup:
         tk.Button(self.popup, text="Salvar", command=self.salvar_filme).pack()
 
     def salvar_filme(self):
+        self.lista_filmes = []
         roaming_dir = os.path.join(os.getenv('APPDATA'), 'Lista de filmes')
         os.makedirs(roaming_dir, exist_ok=True)
         file_path = os.path.join(roaming_dir, "registros_filmes.json")
